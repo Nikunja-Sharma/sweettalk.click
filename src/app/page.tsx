@@ -340,7 +340,7 @@ export default function HomePage() {
                     Current: <strong className="text-primary">{selectedMood}</strong>
                   </span>
                 </div>
-                <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+                <div className="flex gap-2 overflow-x-auto p-1 no-scrollbar">
                   {MOODS.map((mood) => {
                     const isSelected = selectedMood === mood.id;
                     return (
@@ -348,11 +348,10 @@ export default function HomePage() {
                         key={mood.id}
                         type="button"
                         onClick={() => setSelectedMood(mood.id)}
-                        className={`px-3.5 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 cursor-pointer active:scale-90 select-none ${
-                          isSelected
-                            ? "bg-primary text-white shadow-md shadow-primary/25 scale-105"
-                            : "bg-surface-container-high/60 text-on-surface-variant hover:bg-surface-container-highest"
-                        }`}
+                        className={`px-3.5 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 cursor-pointer active:scale-90 select-none ${isSelected
+                          ? "bg-primary text-white shadow-md shadow-primary/25 scale-105"
+                          : "bg-surface-container-high/60 text-on-surface-variant hover:bg-surface-container-highest"
+                          }`}
                       >
                         <span>{mood.emoji}</span>
                         <span>{mood.label}</span>
@@ -397,7 +396,7 @@ export default function HomePage() {
                 </Link>
               </div>
 
-              <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+              <div className="flex gap-2 overflow-x-auto p-1 no-scrollbar">
                 {VIBE_CATEGORIES.map((cat) => {
                   const isActive = selectedVibe === cat.name;
                   return (
@@ -405,11 +404,10 @@ export default function HomePage() {
                       key={cat.name}
                       type="button"
                       onClick={() => setSelectedVibe(cat.name)}
-                      className={`px-3.5 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap transition-all duration-200 active:scale-90 cursor-pointer ${
-                        isActive
-                          ? "bg-primary-container text-white shadow-xs scale-105"
-                          : "bg-white border border-black/[0.06] text-on-surface-variant hover:border-black/[0.15]"
-                      }`}
+                      className={`px-3.5 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap transition-all duration-200 active:scale-90 cursor-pointer ${isActive
+                        ? "bg-primary-container text-white shadow-xs scale-105"
+                        : "bg-white border border-black/[0.06] text-on-surface-variant hover:border-black/[0.15]"
+                        }`}
                     >
                       <span
                         className="material-symbols-outlined text-[15px]"
@@ -466,15 +464,14 @@ export default function HomePage() {
                       onClick={() =>
                         handleCopy(
                           generatedLine ||
-                            `"Are you Wi-Fi? Because I'm feeling a serious connection, and honestly I don't even need a password to love it."`,
+                          `"Are you Wi-Fi? Because I'm feeling a serious connection, and honestly I don't even need a password to love it."`,
                           "ai-output"
                         )
                       }
-                      className={`shrink-0 whitespace-nowrap px-4 py-2 rounded-full border text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-xs cursor-pointer ${
-                        copiedId === "ai-output"
-                          ? "bg-zinc-900 text-white border-transparent"
-                          : "bg-white border-black/[0.08] text-on-surface hover:bg-zinc-50"
-                      }`}
+                      className={`shrink-0 whitespace-nowrap px-4 py-2 rounded-full border text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-xs cursor-pointer ${copiedId === "ai-output"
+                        ? "bg-zinc-900 text-white border-transparent"
+                        : "bg-white border-black/[0.08] text-on-surface hover:bg-zinc-50"
+                        }`}
                     >
                       <span className="material-symbols-outlined text-[15px]">
                         {copiedId === "ai-output" ? "check" : "content_copy"}
@@ -485,16 +482,14 @@ export default function HomePage() {
                     <button
                       type="button"
                       onClick={() => toggleFavorite("ai-output")}
-                      className={`shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-xs cursor-pointer ${
-                        favorites["ai-output"]
-                          ? "bg-primary text-white"
-                          : "bg-white border border-black/[0.08] text-on-surface hover:bg-zinc-50"
-                      }`}
+                      className={`shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-xs cursor-pointer ${favorites["ai-output"]
+                        ? "bg-primary text-white"
+                        : "bg-white border border-black/[0.08] text-on-surface hover:bg-zinc-50"
+                        }`}
                     >
                       <span
-                        className={`material-symbols-outlined text-[15px] ${
-                          favorites["ai-output"] ? "animate-heart-pop text-rose-300" : ""
-                        }`}
+                        className={`material-symbols-outlined text-[15px] ${favorites["ai-output"] ? "animate-heart-pop text-rose-300" : ""
+                          }`}
                         style={{
                           fontVariationSettings: favorites["ai-output"]
                             ? "'FILL' 1"
@@ -564,17 +559,15 @@ export default function HomePage() {
                         <button
                           type="button"
                           onClick={() => toggleFavorite(card.id)}
-                          className={`w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-200 active:scale-80 cursor-pointer shrink-0 ${
-                            isFav
-                              ? "bg-rose-50 border-rose-200 text-rose-600"
-                              : "bg-white border-black/[0.08] text-on-surface-variant hover:text-rose-500"
-                          }`}
+                          className={`w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-200 active:scale-80 cursor-pointer shrink-0 ${isFav
+                            ? "bg-rose-50 border-rose-200 text-rose-600"
+                            : "bg-white border-black/[0.08] text-on-surface-variant hover:text-rose-500"
+                            }`}
                           title="Save to favorites"
                         >
                           <span
-                            className={`material-symbols-outlined text-[18px] transition-transform ${
-                              isFav ? "animate-heart-pop" : ""
-                            }`}
+                            className={`material-symbols-outlined text-[18px] transition-transform ${isFav ? "animate-heart-pop" : ""
+                              }`}
                             style={{
                               fontVariationSettings: isFav ? "'FILL' 1" : "'FILL' 0",
                             }}
@@ -585,11 +578,10 @@ export default function HomePage() {
                         <button
                           type="button"
                           onClick={() => handleCopy(card.line, card.id)}
-                          className={`shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-xs cursor-pointer ${
-                            isCopied
-                              ? "bg-zinc-900 text-white"
-                              : "bg-primary text-white hover:opacity-90"
-                          }`}
+                          className={`shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-xs cursor-pointer ${isCopied
+                            ? "bg-zinc-900 text-white"
+                            : "bg-primary text-white hover:opacity-90"
+                            }`}
                         >
                           <span className="material-symbols-outlined text-[15px] shrink-0">
                             {isCopied ? "check" : "content_copy"}

@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import Image from "next/image";
 import AppHeader from "@/components/AppHeader";
 import BottomNav from "@/components/BottomNav";
 
@@ -103,6 +104,14 @@ const CATEGORIES: CategoryItem[] = [
   },
 ];
 
+const CUSTOM_TONES = [
+  { id: "Flirty", label: "🔥 Flirty" },
+  { id: "Witty", label: "💡 Witty" },
+  { id: "Sweet", label: "💖 Sweet" },
+  { id: "Bold", label: "⚡ Bold" },
+  { id: "Savage", label: "🌶️ Savage" },
+];
+
 export default function CategoriesPage() {
   const [currentTab, setCurrentTab] = useState<"Dating Apps" | "Texting" | "IG Replies">("Dating Apps");
   const [searchQuery, setSearchQuery] = useState("");
@@ -110,6 +119,15 @@ export default function CategoriesPage() {
   const [isUnlocked, setIsUnlocked] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const [countdown, setCountdown] = useState({ h: "04", m: "12", s: "55" });
+
+  // Custom Vibe Modal states
+  const [showCustomModal, setShowCustomModal] = useState(false);
+  const [customPrompt, setCustomPrompt] = useState("");
+  const [customScreenshot, setCustomScreenshot] = useState<string | null>(null);
+  const [customTone, setCustomTone] = useState<string>("Flirty");
+  const [isGeneratingCustom, setIsGeneratingCustom] = useState(false);
+  const [customResults, setCustomResults] = useState<string[] | null>(null);
+  const customFileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     let totalSeconds = 4 * 3600 + 12 * 60 + 55;
@@ -131,6 +149,54 @@ export default function CategoriesPage() {
     }, 2000);
   };
 
+  const handleCustomFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const url = URL.createObjectURL(file);
+      setCustomScreenshot(url);
+      showToast("Chat screenshot attached! 📸");
+    }
+  };
+
+  const handleGenerateCustom = () => {
+    if (!customPrompt.trim() && !customScreenshot) {
+      showToast("Please enter a situation or upload a screenshot!");
+      return;
+    }
+    setIsGeneratingCustom(true);
+    setTimeout(() => {
+      setIsGeneratingCustom(false);
+      let lines: string[] = [];
+      if (customTone === "Flirty") {
+        lines = [
+          `"Honestly, seeing that made me realize my week won't be complete without taking you out for drinks."`,
+          `"I was trying to mind my own business, but you just made that completely impossible."`,
+          `"On a scale from 1 to 10, how spontaneous are you feeling this weekend? Because I have an idea."`,
+        ];
+      } else if (customTone === "Witty") {
+        lines = [
+          `"I'd challenge you to a debate on this, but I'm pretty sure you'd just distract me with your smile."`,
+          `"I was going to say something intellectual, but my brain completely stalled when I saw your message."`,
+          `"Are we actually discussing this, or is this just your smooth way of asking me on a date?"`,
+        ];
+      } else if (customTone === "Bold") {
+        lines = [
+          `"Let's skip the 20 questions game. Are you free Thursday night, or should I clear my Friday for you?"`,
+          `"You look like trouble, but honestly, good trouble is my favorite kind."`,
+          `"I have a policy against talking this much before our first cocktail. 8 PM tomorrow?"`,
+        ];
+      } else {
+        lines = [
+          `"Just wanted to drop by and say you have the most infectious energy I've seen in weeks."`,
+          `"I hope your day has been as genuinely lovely as you are."`,
+          `"You just made my whole afternoon with that."`,
+        ];
+      }
+      setCustomResults(lines);
+      showToast("Generated 3 custom replies! ✨");
+    }, 700);
+  };
+
   const filteredCategories = CATEGORIES.filter((cat) => {
     const matchesSearch =
       cat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -141,7 +207,7 @@ export default function CategoriesPage() {
   return (
     <div className="min-h-screen bg-[#fafbfc] flex flex-col items-center justify-start antialiased text-on-surface">
       {toastMessage && (
-        <div className="fixed top-20 z-[60] px-4 py-2.5 bg-zinc-900/90 text-white backdrop-blur-md rounded-full text-label-sm font-medium shadow-xl animate-fade-in-up flex items-center gap-2 border border-white/10">
+        <div className="fixed top-20 z-[80] px-4 py-2.5 bg-zinc-900/90 text-white backdrop-blur-md rounded-full text-label-sm font-medium shadow-xl animate-fade-in-up flex items-center gap-2 border border-white/10">
           <span className="material-symbols-outlined text-[16px] text-primary-fixed">
             check_circle
           </span>
@@ -373,10 +439,14 @@ export default function CategoriesPage() {
               </div>
             )}
 
-            {/* Custom Vibe Request Banner */}
-            <div className="bg-white rounded-3xl p-4 sm:p-5 flex items-center justify-between gap-3 shadow-2xs border border-black/[0.06]">
+            {/* Custom Vibe Request Card (Clickable Banner to open Custom Vibe AI) */}
+            <div
+              role="button"
+              onClick={() => setShowCustomModal(true)}
+              className="bg-white rounded-3xl p-4 sm:p-5 flex items-center justify-between gap-3 shadow-2xs border border-black/[0.06] cursor-pointer hover:shadow-soft active:scale-[0.99] transition-all select-none touch-manipulation group"
+            >
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                <div className="w-11 h-11 rounded-2xl bg-gradient-to-tr from-primary/15 to-purple-500/15 flex items-center justify-center text-primary shrink-0 group-hover:scale-105 transition-transform">
                   <span className="material-symbols-outlined text-[22px]">auto_awesome</span>
                 </div>
                 <div>
@@ -384,13 +454,16 @@ export default function CategoriesPage() {
                     Need a custom vibe?
                   </h4>
                   <p className="text-xs text-on-surface-variant/70 mt-0.5">
-                    Describe your exact conversation context.
+                    Describe your exact situation or upload a chat screenshot.
                   </p>
                 </div>
               </div>
               <button
                 type="button"
-                onClick={() => showToast("Opening custom generator...")}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowCustomModal(true);
+                }}
                 className="bg-primary text-white w-9 h-9 rounded-full shadow-md hover:opacity-90 active:scale-90 transition-transform flex items-center justify-center shrink-0 cursor-pointer"
                 title="Create custom vibe"
               >
@@ -399,6 +472,200 @@ export default function CategoriesPage() {
             </div>
           </div>
         </main>
+
+        {/* Custom Vibe AI Modal Drawer with Input & Screenshot Upload */}
+        {showCustomModal && (
+          <div className="fixed inset-0 z-[75] bg-black/60 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4">
+            <div className="w-full max-w-md bg-white rounded-t-3xl sm:rounded-3xl p-5 sm:p-6 shadow-2xl flex flex-col gap-4 animate-in slide-in-from-bottom max-h-[90vh] overflow-y-auto border border-black/[0.08]">
+              {/* Modal Header */}
+              <div className="flex items-center justify-between pb-3 border-b border-black/[0.06]">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                    <span className="material-symbols-outlined text-[18px]">auto_awesome</span>
+                  </div>
+                  <div>
+                    <h3 className="font-headline-md text-sm sm:text-base font-bold text-on-surface">
+                      Custom Vibe Creator
+                    </h3>
+                    <p className="text-[11px] text-outline">Tailored to your specific match</p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setShowCustomModal(false)}
+                  className="w-7 h-7 rounded-full bg-zinc-100 flex items-center justify-center text-outline hover:text-on-surface cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-[16px]">close</span>
+                </button>
+              </div>
+
+              {/* Textarea Input */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold text-on-surface">
+                  1. Describe the situation or inside joke
+                </label>
+                <textarea
+                  value={customPrompt}
+                  onChange={(e) => setCustomPrompt(e.target.value)}
+                  placeholder="e.g. She posted a picture with her golden retriever at the beach, or we haven't texted in 2 weeks after our first coffee date..."
+                  rows={3}
+                  className="w-full bg-zinc-50 border border-black/[0.08] rounded-2xl p-3 text-xs sm:text-sm text-on-surface placeholder:text-outline/70 focus:outline-none focus:ring-2 focus:ring-primary/40 leading-relaxed resize-none"
+                />
+              </div>
+
+              {/* Chat Screenshot Upload */}
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-on-surface">
+                    2. Upload chat screenshot (optional)
+                  </label>
+                  {customScreenshot && (
+                    <button
+                      type="button"
+                      onClick={() => setCustomScreenshot(null)}
+                      className="text-[11px] text-red-600 hover:underline"
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+
+                <input
+                  type="file"
+                  ref={customFileInputRef}
+                  accept="image/*"
+                  onChange={handleCustomFileUpload}
+                  className="hidden"
+                />
+
+                {customScreenshot ? (
+                  <div className="relative rounded-2xl overflow-hidden border border-black/[0.08] bg-zinc-50 group">
+                    <Image
+                      src={customScreenshot}
+                      alt="Uploaded screenshot"
+                      width={300}
+                      height={120}
+                      className="w-full max-h-32 object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => customFileInputRef.current?.click()}
+                        className="px-3 py-1 bg-white text-zinc-900 rounded-full text-xs font-semibold"
+                      >
+                        Change
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setCustomScreenshot(null)}
+                        className="px-3 py-1 bg-red-600 text-white rounded-full text-xs font-semibold"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => customFileInputRef.current?.click()}
+                    className="w-full border border-dashed border-black/[0.12] hover:border-primary/50 bg-zinc-50/70 hover:bg-primary/[0.02] p-3 rounded-2xl flex items-center justify-center gap-2 text-xs text-on-surface-variant font-medium transition-colors cursor-pointer"
+                  >
+                    <span className="material-symbols-outlined text-[18px] text-primary">
+                      add_photo_alternate
+                    </span>
+                    <span>Tap to attach chat screenshot</span>
+                  </button>
+                )}
+              </div>
+
+              {/* Tone Selection */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-semibold text-on-surface">
+                  3. Select desired tone
+                </label>
+                <div className="flex gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+                  {CUSTOM_TONES.map((tone) => {
+                    const isSelected = customTone === tone.id;
+                    return (
+                      <button
+                        key={tone.id}
+                        type="button"
+                        onClick={() => setCustomTone(tone.id)}
+                        className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 cursor-pointer active:scale-95 ${
+                          isSelected
+                            ? "bg-primary text-white shadow-xs"
+                            : "bg-zinc-100 text-on-surface-variant hover:bg-zinc-200"
+                        }`}
+                      >
+                        {tone.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Generate Button */}
+              <button
+                type="button"
+                onClick={handleGenerateCustom}
+                disabled={isGeneratingCustom}
+                className="w-full py-3 bg-gradient-to-r from-primary to-primary-container text-white font-bold rounded-full text-xs sm:text-sm shadow-md shadow-primary/25 hover:opacity-95 active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-75"
+              >
+                {isGeneratingCustom ? (
+                  <>
+                    <span className="material-symbols-outlined animate-spin text-[16px]">
+                      progress_activity
+                    </span>
+                    <span>Generating Custom Replies...</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="material-symbols-outlined text-[16px]">auto_awesome</span>
+                    <span>Generate Custom Reply</span>
+                  </>
+                )}
+              </button>
+
+              {/* Generated Results Area */}
+              {customResults && (
+                <div className="flex flex-col gap-2.5 pt-3 border-t border-black/[0.06] animate-fade-in-up">
+                  <span className="text-xs font-bold text-on-surface flex items-center gap-1">
+                    <span className="material-symbols-outlined text-[16px] text-primary">
+                      verified
+                    </span>
+                    Custom AI Suggestions ({customTone}):
+                  </span>
+
+                  <div className="flex flex-col gap-2">
+                    {customResults.map((line, idx) => (
+                      <div
+                        key={idx}
+                        className="p-3 rounded-2xl bg-zinc-50 border border-black/[0.05] flex flex-col gap-2"
+                      >
+                        <p className="text-xs sm:text-sm text-on-surface leading-relaxed">{line}</p>
+                        <div className="flex justify-end">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              navigator.clipboard.writeText(line);
+                              showToast("Line copied to clipboard! 📋");
+                            }}
+                            className="text-xs text-primary font-semibold flex items-center gap-1 hover:underline cursor-pointer"
+                          >
+                            <span className="material-symbols-outlined text-[14px]">
+                              content_copy
+                            </span>
+                            Copy Line
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         <BottomNav />
       </div>
