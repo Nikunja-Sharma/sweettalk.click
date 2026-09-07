@@ -1,60 +1,57 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #474dc5;
+  --color-primary: #5056e8;
   --color-primary-container: #6067df;
   --color-on-primary: #ffffff;
-  --color-on-primary-container: #fffbff;
-  --color-primary-fixed: #e0e0ff;
-  --color-primary-fixed-dim: #bfc2ff;
-  --color-on-primary-fixed: #02006d;
+  --color-on-primary-container: #ffffff;
+  --color-primary-fixed: #e4e6ff;
+  --color-primary-fixed-dim: #c8cbff;
+  --color-on-primary-fixed: #10167c;
   --color-on-primary-fixed-variant: #3035af;
   --color-inverse-primary: #bfc2ff;
 
-  --color-secondary: #345f99;
-  --color-secondary-container: #94bdfd;
+  --color-secondary: #3b68aa;
+  --color-secondary-container: #b3d1ff;
   --color-on-secondary: #ffffff;
   --color-on-secondary-container: #1c4c84;
-  --color-secondary-fixed: #d5e3ff;
-  --color-secondary-fixed-dim: #a6c8ff;
+  --color-secondary-fixed: #dbe7ff;
+  --color-secondary-fixed-dim: #b8d2ff;
   --color-on-secondary-fixed: #001c3b;
-  --color-on-secondary-fixed-variant: #15477f;
 
-  --color-tertiary: #794c7c;
-  --color-tertiary-container: #946496;
+  --color-tertiary: #8f5592;
+  --color-tertiary-container: #ffd5fd;
   --color-on-tertiary: #ffffff;
-  --color-on-tertiary-container: #fffbff;
-  --color-tertiary-fixed: #ffd6fd;
-  --color-tertiary-fixed-dim: #ecb4ec;
-  --color-on-tertiary-fixed: #310937;
-  --color-on-tertiary-fixed-variant: #623766;
+  --color-on-tertiary-container: #3d1042;
+  --color-tertiary-fixed: #ffd8fd;
+  --color-tertiary-fixed-dim: #f3bdf2;
 
-  --color-surface: #f8f9fa;
-  --color-surface-dim: #d9dadb;
-  --color-surface-bright: #f8f9fa;
+  --color-surface: #f9fafb;
+  --color-surface-dim: #eceef1;
+  --color-surface-bright: #ffffff;
   --color-surface-container-lowest: #ffffff;
-  --color-surface-container-low: #f3f4f5;
-  --color-surface-container: #edeeef;
-  --color-surface-container-high: #e7e8e9;
-  --color-surface-container-highest: #e1e3e4;
-  --color-surface-tint: #4950c7;
-  --color-surface-variant: #e1e3e4;
+  --color-surface-container-low: #f3f4f6;
+  --color-surface-container: #ebecef;
+  --color-surface-container-high: #e3e5e9;
+  --color-surface-container-highest: #dcdee3;
+  --color-surface-tint: #5056e8;
+  --color-surface-variant: #e2e4ea;
 
-  --color-on-surface: #191c1d;
-  --color-on-surface-variant: #464653;
-  --color-inverse-surface: #2e3132;
-  --color-inverse-on-surface: #f0f1f2;
+  --color-on-surface: #111418;
+  --color-on-surface-variant: #4b5260;
+  --color-inverse-surface: #2b2e35;
+  --color-inverse-on-surface: #f2f3f5;
 
-  --color-error: #ba1a1a;
+  --color-error: #dc2626;
   --color-on-error: #ffffff;
-  --color-error-container: #ffdad6;
-  --color-on-error-container: #93000a;
+  --color-error-container: #fee2e2;
+  --color-on-error-container: #991b1b;
 
-  --color-outline: #767685;
-  --color-outline-variant: #c6c5d6;
+  --color-outline: #8991a1;
+  --color-outline-variant: #d5d9e2;
 
-  --color-background: #f8f9fa;
-  --color-on-background: #191c1d;
+  --color-background: #f9fafb;
+  --color-on-background: #111418;
 
   --spacing-margin-screen: 16px;
   --spacing-gutter-sm: 12px;
@@ -74,33 +71,36 @@
     border-radius: 24px;
   }
   .font-headline-xl {
-    font-size: 32px;
-    line-height: 40px;
+    font-size: 30px;
+    line-height: 38px;
     font-weight: 700;
+    letter-spacing: -0.02em;
   }
   .font-headline-lg {
-    font-size: 24px;
-    line-height: 32px;
+    font-size: 22px;
+    line-height: 28px;
     font-weight: 700;
+    letter-spacing: -0.015em;
   }
   .font-headline-md {
-    font-size: 18px;
-    line-height: 24px;
+    font-size: 17px;
+    line-height: 22px;
     font-weight: 600;
+    letter-spacing: -0.01em;
   }
   .font-body-lg {
-    font-size: 16px;
-    line-height: 24px;
+    font-size: 15px;
+    line-height: 22px;
     font-weight: 400;
   }
   .font-body-md {
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 13.5px;
+    line-height: 19px;
     font-weight: 400;
   }
   .font-label-lg {
-    font-size: 14px;
-    line-height: 20px;
+    font-size: 13.5px;
+    line-height: 18px;
     font-weight: 600;
   }
   .font-label-sm {
@@ -116,6 +116,26 @@
   .scrollbar-none {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.04), 0 2px 6px -1px rgba(0, 0, 0, 0.02);
+  }
+
+  .glass-nav {
+    background: rgba(255, 255, 255, 0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.08), 0 0 1px 1px rgba(0, 0, 0, 0.04);
+  }
+
+  .shadow-soft {
+    box-shadow: 0 6px 24px -4px rgba(71, 77, 197, 0.08), 0 2px 8px -2px rgba(0, 0, 0, 0.03);
   }
 
   .animate-heart-pop {
@@ -160,7 +180,7 @@
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(14px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -193,16 +213,16 @@
     transform: translateY(0px) scale(1);
   }
   100% {
-    transform: translateY(-8px) scale(1.05);
+    transform: translateY(-8px) scale(1.04);
   }
 }
 
 @keyframes glowPulse {
   0%, 100% {
-    box-shadow: 0 0 0 0 rgba(71, 77, 197, 0.35);
+    box-shadow: 0 0 0 0 rgba(80, 86, 232, 0.35);
   }
   50% {
-    box-shadow: 0 0 16px 4px rgba(71, 77, 197, 0.25);
+    box-shadow: 0 0 20px 6px rgba(80, 86, 232, 0.25);
   }
 }
 
@@ -210,10 +230,20 @@
   display: none;
 }
 
-html, body {
-  overscroll-behavior: none;
-  background-color: var(--color-surface, #f8f9fa);
-  color: var(--color-on-surface, #191c1d);
-  font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+* {
+  -webkit-tap-highlight-color: transparent;
 }
 
+button, a, [role="button"] {
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+html, body {
+  overscroll-behavior: none;
+  background-color: var(--color-surface, #f9fafb);
+  color: var(--color-on-surface, #111418);
+  font-family: var(--font-plus-jakarta), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  letter-spacing: -0.01em;
+}

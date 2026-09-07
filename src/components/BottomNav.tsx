@@ -14,43 +14,45 @@ export default function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed bottom-0 max-w-md w-full z-50 pb-safe bg-surface/90 backdrop-blur-xl border-t border-outline-variant/20">
-      <div className="flex justify-around items-center h-20 px-4">
-        {NAV_ITEMS.map((item) => {
-          const isActive =
-            item.href === "/"
-              ? pathname === "/"
-              : pathname.startsWith(item.href);
+    <nav className="fixed bottom-0 max-w-md w-full z-50 pb-safe pointer-events-none">
+      <div className="mx-4 mb-3 pointer-events-auto">
+        <div className="glass-nav rounded-full px-3 py-2 flex justify-around items-center h-[68px] shadow-lg shadow-black/5">
+          {NAV_ITEMS.map((item) => {
+            const isActive =
+              item.href === "/"
+                ? pathname === "/"
+                : pathname.startsWith(item.href);
 
-          return (
-            <Link
-              key={item.name}
-              href={item.href}
-              className={`flex items-center justify-center transition-all duration-300 ease-out cursor-pointer active:scale-90 select-none ${
-                isActive
-                  ? "w-14 h-14 rounded-full bg-primary-container text-on-primary-container shadow-md scale-105"
-                  : "flex-col gap-1 w-16 h-16 text-on-surface-variant hover:text-on-surface hover:scale-105"
-              }`}
-              title={item.name}
-            >
-              <span
-                className={`material-symbols-outlined text-[24px] transition-transform duration-300 ${
-                  isActive ? "scale-110" : ""
+            return (
+              <Link
+                key={item.name}
+                href={item.href}
+                className={`flex items-center justify-center transition-all duration-300 ease-out cursor-pointer select-none ${
+                  isActive
+                    ? "w-12 h-12 rounded-full bg-gradient-to-tr from-primary to-primary-container text-white shadow-md shadow-primary/25 scale-105"
+                    : "flex-col gap-0.5 w-14 h-12 text-on-surface-variant/80 hover:text-on-surface active:scale-90"
                 }`}
-                style={{
-                  fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0",
-                }}
+                title={item.name}
               >
-                {item.icon}
-              </span>
-              {!isActive && (
-                <span className="text-label-sm text-[11px] transition-opacity duration-200">
-                  {item.name}
+                <span
+                  className={`material-symbols-outlined transition-transform duration-300 ${
+                    isActive ? "text-[22px] scale-105" : "text-[21px]"
+                  }`}
+                  style={{
+                    fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0",
+                  }}
+                >
+                  {item.icon}
                 </span>
-              )}
-            </Link>
-          );
-        })}
+                {!isActive && (
+                  <span className="text-[10.5px] font-medium tracking-tight">
+                    {item.name}
+                  </span>
+                )}
+              </Link>
+            );
+          })}
+        </div>
       </div>
     </nav>
   );

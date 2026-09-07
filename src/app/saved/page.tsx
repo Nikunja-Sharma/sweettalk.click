@@ -11,8 +11,7 @@ interface SavedLine {
   source: string;
   line: string;
   stats: string;
-  badgeBg: string;
-  badgeText: string;
+  badgeTone: string;
 }
 
 const INITIAL_SAVED_LINES: SavedLine[] = [
@@ -22,8 +21,7 @@ const INITIAL_SAVED_LINES: SavedLine[] = [
     source: "AI Generated",
     line: "Are you a Wi-Fi signal? Because I’m feeling an absolute connection and I’m ready to ask for your password.",
     stats: "Used 3 times · 94% success",
-    badgeBg: "bg-primary-fixed",
-    badgeText: "text-on-primary-fixed",
+    badgeTone: "bg-rose-50 text-rose-700 border-rose-200/60",
   },
   {
     id: "saved-2",
@@ -31,8 +29,7 @@ const INITIAL_SAVED_LINES: SavedLine[] = [
     source: "Custom Prompt",
     line: "I was trying to come up with a clever pickup line, but honestly, I'd rather just ask what your favorite midnight snack is.",
     stats: "Used 7 times · 98% success",
-    badgeBg: "bg-secondary-fixed",
-    badgeText: "text-on-secondary-fixed",
+    badgeTone: "bg-violet-50 text-violet-700 border-violet-200/60",
   },
   {
     id: "saved-3",
@@ -40,8 +37,7 @@ const INITIAL_SAVED_LINES: SavedLine[] = [
     source: "Daily Pick",
     line: "They say beauty is in the eye of the beholder, but clearly they haven't seen you smile across a crowded room.",
     stats: "Used 1 time · New",
-    badgeBg: "bg-tertiary-fixed",
-    badgeText: "text-on-tertiary-fixed",
+    badgeTone: "bg-pink-50 text-pink-700 border-pink-200/60",
   },
   {
     id: "saved-4",
@@ -49,8 +45,7 @@ const INITIAL_SAVED_LINES: SavedLine[] = [
     source: "Trending",
     line: "I was going to say something smooth about your coffee, but I got distracted by your smile instead.",
     stats: "Used 5 times · 96% success",
-    badgeBg: "bg-primary-fixed-dim",
-    badgeText: "text-on-primary-fixed",
+    badgeTone: "bg-amber-50 text-amber-700 border-amber-200/60",
   },
 ];
 
@@ -79,7 +74,7 @@ export default function SavedPage() {
   const handleCopy = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
     setCopiedId(id);
-    showToast("Copied to clipboard!");
+    showToast("Copied to clipboard! 📋");
     setTimeout(() => {
       setCopiedId(null);
     }, 1800);
@@ -102,53 +97,53 @@ export default function SavedPage() {
   });
 
   return (
-    <div className="min-h-screen bg-surface flex flex-col items-center justify-start antialiased text-on-surface">
+    <div className="min-h-screen bg-[#fafbfc] flex flex-col items-center justify-start antialiased text-on-surface">
       {toastMessage && (
-        <div className="fixed top-20 z-[60] px-4 py-2 bg-on-surface text-surface rounded-full text-label-sm font-medium shadow-lg animate-bounce flex items-center gap-1.5">
-          <span className="material-symbols-outlined text-[16px] text-secondary-container">
+        <div className="fixed top-20 z-[60] px-4 py-2.5 bg-zinc-900/90 text-white backdrop-blur-md rounded-full text-label-sm font-medium shadow-xl animate-fade-in-up flex items-center gap-2 border border-white/10">
+          <span className="material-symbols-outlined text-[16px] text-primary-fixed">
             check_circle
           </span>
           <span>{toastMessage}</span>
         </div>
       )}
 
-      <div className="w-full max-w-md min-h-screen flex flex-col bg-surface relative shadow-2xl md:border-x md:border-outline-variant/30">
+      <div className="w-full max-w-md min-h-screen flex flex-col bg-surface relative shadow-xl shadow-black/5 md:border-x md:border-black/[0.05]">
         <AppHeader title="Saved" />
 
-        <main className="flex flex-col relative w-full px-4 pt-20 pb-28 bg-surface flex-1">
-          <div className="flex flex-col w-full gap-6">
-            {/* Free Premium Banner */}
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-primary-container to-tertiary-container p-6 text-on-primary-container shadow-lg">
-              <div className="absolute -right-6 -bottom-6 w-32 h-32 rounded-full bg-surface/10 blur-xl pointer-events-none"></div>
-              <div className="absolute right-12 -top-6 w-20 h-20 rounded-full bg-secondary-container/20 blur-lg pointer-events-none"></div>
+        <main className="flex flex-col relative w-full px-4 pt-20 pb-32 bg-surface flex-1">
+          <div className="flex flex-col w-full gap-5">
+            {/* Free Premium Perk Card */}
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-primary to-indigo-700 p-5 text-white shadow-soft">
+              <div className="absolute -right-6 -bottom-6 w-32 h-32 rounded-full bg-white/10 blur-xl pointer-events-none"></div>
+              <div className="absolute right-12 -top-6 w-20 h-20 rounded-full bg-purple-400/20 blur-lg pointer-events-none"></div>
 
-              <div className="relative z-10 flex items-start justify-between gap-4">
-                <div className="flex flex-col gap-2">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface/20 backdrop-blur-md w-fit text-label-sm font-semibold text-white">
-                    <span className="material-symbols-outlined text-[16px]">bolt</span>
-                    <span>Limited Time Perk</span>
+              <div className="relative z-10 flex items-start justify-between gap-3">
+                <div className="flex flex-col gap-1.5">
+                  <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/20 backdrop-blur-md w-fit text-[11px] font-semibold text-white border border-white/20">
+                    <span className="material-symbols-outlined text-[13px]">bolt</span>
+                    <span>Free Perk</span>
                   </div>
-                  <h2 className="font-headline-lg text-[22px] leading-tight text-white">
+                  <h2 className="font-headline-lg text-lg sm:text-xl leading-tight text-white mt-0.5">
                     Unlock 5 Free AI Rizz Lines!
                   </h2>
-                  <p className="font-body-md text-white/90 text-sm leading-relaxed">
-                    Tap below to claim your complimentary premium prompt pack and level up your charm.
+                  <p className="text-white/85 text-xs sm:text-sm leading-relaxed">
+                    Claim your complimentary premium prompt pack and level up your charm.
                   </p>
                 </div>
-                <div className="flex-shrink-0 w-12 h-12 rounded-full bg-surface/20 backdrop-blur-md flex items-center justify-center text-white">
-                  <span className="material-symbols-outlined text-2xl">card_giftcard</span>
+                <div className="shrink-0 w-11 h-11 rounded-2xl bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/20">
+                  <span className="material-symbols-outlined text-[22px]">card_giftcard</span>
                 </div>
               </div>
 
-              <div className="mt-4 pt-4 border-t border-surface/15 flex items-center justify-between">
-                <span className="text-label-sm text-white/80">Expires in 24 hours</span>
+              <div className="mt-4 pt-3.5 border-t border-white/15 flex items-center justify-between">
+                <span className="text-[11px] text-white/70">Expires in 24 hours</span>
                 <button
                   type="button"
                   onClick={handleClaimBonus}
                   disabled={isBonusClaimed}
-                  className="px-5 py-2.5 rounded-full bg-surface text-primary font-label-lg shadow-md hover:bg-surface-bright active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-80"
+                  className="px-4 py-2 rounded-full bg-white text-primary font-semibold text-xs shadow-md hover:bg-zinc-50 active:scale-95 transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-85"
                 >
-                  <span className="material-symbols-outlined text-[18px]">
+                  <span className="material-symbols-outlined text-[16px]">
                     {isBonusClaimed ? "verified" : "redeem"}
                   </span>
                   <span>{isBonusClaimed ? "Unlocked!" : "Claim Free Lines"}</span>
@@ -157,19 +152,19 @@ export default function SavedPage() {
             </div>
 
             {/* Mood Folders Horizontal Scroll */}
-            <div className="flex flex-col gap-3">
-              <div className="flex items-center justify-between">
-                <h3 className="font-headline-md text-on-surface">Mood Folders</h3>
+            <div className="flex flex-col gap-2.5">
+              <div className="flex items-center justify-between px-1">
+                <h3 className="font-headline-md text-on-surface text-base">Mood Folders</h3>
                 <button
                   type="button"
-                  onClick={() => showToast("Folder management")}
-                  className="text-label-sm text-primary font-semibold hover:underline"
+                  onClick={() => showToast("Manage folders")}
+                  className="text-xs text-primary font-semibold hover:underline cursor-pointer"
                 >
                   Manage
                 </button>
               </div>
 
-              <div className="flex gap-2.5 overflow-x-auto pb-1 no-scrollbar -mx-1 px-1">
+              <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar -mx-1 px-1">
                 {MOOD_FOLDERS.map((folder) => {
                   const isActive = selectedFolder === folder.category;
                   return (
@@ -177,23 +172,23 @@ export default function SavedPage() {
                       key={folder.name}
                       type="button"
                       onClick={() => setSelectedFolder(folder.category)}
-                      className={`flex items-center gap-2 px-4 py-3 rounded-2xl flex-shrink-0 transition-transform active:scale-95 cursor-pointer ${
+                      className={`flex items-center gap-2.5 px-4 py-2.5 rounded-2xl flex-shrink-0 transition-all duration-200 active:scale-95 cursor-pointer border ${
                         isActive
-                          ? "bg-primary text-on-primary shadow-sm"
-                          : "bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest"
+                          ? "bg-primary-container text-white border-primary-container shadow-xs scale-105"
+                          : "bg-white text-on-surface border-black/[0.06] hover:border-black/[0.15]"
                       }`}
                     >
                       <span
-                        className="material-symbols-outlined text-[20px]"
+                        className="material-symbols-outlined text-[18px]"
                         style={{ fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}
                       >
                         {folder.icon}
                       </span>
                       <div className="flex flex-col text-left">
-                        <span className="font-label-lg leading-none">{folder.name}</span>
+                        <span className="text-xs font-bold leading-tight">{folder.name}</span>
                         <span
-                          className={`text-[11px] mt-1 ${
-                            isActive ? "opacity-80" : "opacity-60"
+                          className={`text-[10px] mt-0.5 ${
+                            isActive ? "text-white/80" : "text-outline"
                           }`}
                         >
                           {folder.count} items
@@ -205,45 +200,35 @@ export default function SavedPage() {
               </div>
             </div>
 
-            {/* Search & Filter Bar */}
-            <div className="flex items-center gap-2">
-              <div className="relative flex-1">
-                <span className="absolute inset-y-0 left-4 flex items-center text-outline pointer-events-none">
-                  <span className="material-symbols-outlined text-[20px]">search</span>
-                </span>
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search saved lines..."
-                  className="w-full h-12 pl-11 pr-4 bg-surface-container-low rounded-full text-on-surface placeholder:text-outline focus:outline-none focus:ring-2 focus:ring-primary/50 text-body-md transition-all shadow-xs"
-                />
-                {searchQuery && (
-                  <button
-                    type="button"
-                    onClick={() => setSearchQuery("")}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface"
-                  >
-                    <span className="material-symbols-outlined text-[18px]">close</span>
-                  </button>
-                )}
-              </div>
-              <button
-                type="button"
-                onClick={() => showToast("Sorted by most recent")}
-                className="w-12 h-12 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:bg-surface-container transition-all cursor-pointer"
-                title="Sort"
-              >
-                <span className="material-symbols-outlined text-[20px]">sort</span>
-              </button>
+            {/* Search Bar */}
+            <div className="relative">
+              <span className="absolute inset-y-0 left-3.5 flex items-center text-outline pointer-events-none">
+                <span className="material-symbols-outlined text-[18px]">search</span>
+              </span>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search saved lines..."
+                className="w-full h-11 pl-10 pr-4 bg-white rounded-2xl border border-black/[0.06] text-on-surface placeholder:text-outline/70 focus:outline-none focus:ring-2 focus:ring-primary/40 text-xs sm:text-sm shadow-2xs transition-all"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface"
+                >
+                  <span className="material-symbols-outlined text-[16px]">close</span>
+                </button>
+              )}
             </div>
 
             {/* Saved Lines List */}
             <div className="flex flex-col gap-3">
-              <div className="flex items-center justify-between">
-                <h3 className="font-headline-md text-on-surface">Saved Favorites</h3>
-                <span className="text-label-sm text-on-surface-variant font-medium">
-                  {lines.length} total
+              <div className="flex items-center justify-between px-1">
+                <h3 className="font-headline-md text-on-surface text-base">Saved Favorites</h3>
+                <span className="text-[11px] text-outline font-medium">
+                  {lines.length} total saved
                 </span>
               </div>
 
@@ -253,25 +238,25 @@ export default function SavedPage() {
                   return (
                     <div
                       key={item.id}
-                      className="group relative bg-surface-container-lowest rounded-2xl p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 ease-out flex flex-col gap-3 border border-outline-variant/20"
+                      className="group relative bg-white rounded-3xl p-4 sm:p-5 shadow-2xs hover:shadow-soft hover:-translate-y-0.5 transition-all duration-300 ease-out flex flex-col gap-3 border border-black/[0.06]"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="flex items-center gap-2">
                           <span
-                            className={`px-2.5 py-0.5 rounded-full ${item.badgeBg} ${item.badgeText} text-label-sm font-semibold`}
+                            className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold border ${item.badgeTone}`}
                           >
                             {item.category}
                           </span>
-                          <span className="text-label-sm text-outline">• {item.source}</span>
+                          <span className="text-[11px] text-outline">• {item.source}</span>
                         </div>
                         <button
                           type="button"
                           onClick={() => handleRemove(item.id)}
-                          className="text-primary hover:scale-110 transition-transform cursor-pointer"
+                          className="w-8 h-8 rounded-full flex items-center justify-center text-rose-500 hover:bg-rose-50 transition-colors cursor-pointer"
                           title="Remove from saved"
                         >
                           <span
-                            className="material-symbols-outlined text-[20px]"
+                            className="material-symbols-outlined text-[18px]"
                             style={{ fontVariationSettings: "'FILL' 1" }}
                           >
                             favorite
@@ -279,50 +264,56 @@ export default function SavedPage() {
                         </button>
                       </div>
 
-                      <p className="font-body-lg text-on-surface leading-relaxed">{item.line}</p>
+                      <p className="font-body-lg text-on-surface leading-relaxed text-xs sm:text-sm bg-zinc-50/70 p-3.5 rounded-2xl border border-black/[0.03]">
+                        {item.line}
+                      </p>
 
-                      <div className="flex items-center justify-between pt-2 border-t border-outline-variant/15 gap-2">
-                        <span className="text-xs text-outline whitespace-nowrap shrink-0">{item.stats}</span>
+                      <div className="flex items-center justify-between pt-1 border-t border-black/[0.04] gap-2">
+                        <span className="text-[11px] text-outline whitespace-nowrap shrink-0">
+                          {item.stats}
+                        </span>
                         <button
                           type="button"
                           onClick={() => handleCopy(item.line, item.id)}
-                          className={`shrink-0 whitespace-nowrap px-4 py-2 rounded-full font-label-sm active:scale-95 transition-all flex items-center gap-1.5 shadow-xs cursor-pointer ${
+                          className={`shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold active:scale-95 transition-all flex items-center gap-1.5 shadow-2xs cursor-pointer ${
                             isCopied
-                              ? "bg-secondary text-on-secondary"
-                              : "bg-primary-container text-on-primary-container hover:opacity-90"
+                              ? "bg-zinc-900 text-white"
+                              : "bg-primary text-white hover:opacity-90"
                           }`}
                         >
-                          <span className="material-symbols-outlined text-[16px] shrink-0">
+                          <span className="material-symbols-outlined text-[15px] shrink-0">
                             {isCopied ? "check" : "content_copy"}
                           </span>
-                          <span className="whitespace-nowrap font-medium">{isCopied ? "Copied!" : "Quick Copy"}</span>
+                          <span className="whitespace-nowrap">
+                            {isCopied ? "Copied!" : "Quick Copy"}
+                          </span>
                         </button>
                       </div>
                     </div>
                   );
                 })
               ) : (
-                <div className="p-8 text-center bg-surface-container-lowest rounded-2xl border border-outline-variant/20">
-                  <p className="text-body-md text-on-surface-variant">
+                <div className="p-8 text-center bg-white rounded-3xl border border-black/[0.06]">
+                  <p className="text-xs text-on-surface-variant">
                     No lines saved in this category yet.
                   </p>
                 </div>
               )}
 
-              {/* Inspiration / Call to Action */}
-              <div className="flex flex-col items-center justify-center py-8 gap-3 text-center">
-                <div className="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary">
-                  <span className="material-symbols-outlined text-[24px]">auto_awesome</span>
+              {/* Inspiration CTA */}
+              <div className="flex flex-col items-center justify-center py-6 gap-2 text-center">
+                <div className="w-10 h-10 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+                  <span className="material-symbols-outlined text-[20px]">auto_awesome</span>
                 </div>
-                <div className="flex flex-col gap-1">
-                  <p className="font-headline-md text-on-surface">Want more inspiration?</p>
-                  <p className="font-body-md text-on-surface-variant text-sm">
-                    Generate fresh replies tailored to your specific chats instantly.
+                <div className="flex flex-col gap-0.5">
+                  <p className="font-headline-md text-on-surface text-sm">Want fresh ideas?</p>
+                  <p className="text-xs text-on-surface-variant/70">
+                    Generate tailored replies for your current matches.
                   </p>
                 </div>
                 <Link
                   href="/"
-                  className="mt-2 px-6 py-3 rounded-full bg-primary text-on-primary font-label-lg shadow-md hover:bg-surface-tint active:scale-95 transition-all inline-block"
+                  className="mt-2 px-5 py-2.5 rounded-full bg-primary text-white font-semibold text-xs shadow-md hover:bg-surface-tint active:scale-95 transition-all inline-block"
                 >
                   Generate New Lines
                 </Link>

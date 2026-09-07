@@ -12,6 +12,7 @@ interface RizzCard {
   title: string;
   subtitle: string;
   rizzScore: string;
+  badgeTone: string;
   line: string;
   usageCount: string;
   vibe: string;
@@ -20,22 +21,24 @@ interface RizzCard {
 const INITIAL_TRENDING_LINES: RizzCard[] = [
   {
     id: "card-1",
-    emoji: "🔥",
+    emoji: "☕",
     title: "The Coffee Shop Opener",
-    subtitle: "Best for Instagram Replies",
-    rizzScore: "98% Rizz",
+    subtitle: "Best for Instagram Story Replies",
+    rizzScore: "98% Match",
+    badgeTone: "bg-amber-50 text-amber-700 border-amber-200/60",
     line: "I was going to say something smooth about your coffee, but I got distracted by your smile instead.",
-    usageCount: "Used 4.2k times today",
+    usageCount: "4.2k sent today",
     vibe: "Sweet",
   },
   {
     id: "card-2",
-    emoji: "💫",
+    emoji: "🌙",
     title: "Late Night Text Back",
     subtitle: "Best for Midnight Chats",
-    rizzScore: "95% Rizz",
+    rizzScore: "95% Match",
+    badgeTone: "bg-indigo-50 text-indigo-700 border-indigo-200/60",
     line: "You're the reason I check my phone with a smile at 2 AM. Sleep is overrated anyway.",
-    usageCount: "Used 2.8k times today",
+    usageCount: "2.8k sent today",
     vibe: "Sweet",
   },
   {
@@ -43,19 +46,21 @@ const INITIAL_TRENDING_LINES: RizzCard[] = [
     emoji: "🎯",
     title: "The Bold Direct Approach",
     subtitle: "High Risk, High Reward",
-    rizzScore: "99% Rizz",
+    rizzScore: "99% Match",
+    badgeTone: "bg-rose-50 text-rose-700 border-rose-200/60",
     line: "Let's skip the small talk. Are we getting tacos this Thursday or should I plan something more romantic?",
-    usageCount: "Used 6.1k times today",
+    usageCount: "6.1k sent today",
     vibe: "Bold",
   },
   {
     id: "card-4",
     emoji: "⚡",
     title: "The Playful Challenge",
-    subtitle: "Great for Tinder Matches",
-    rizzScore: "97% Rizz",
+    subtitle: "Great for Hinge & Tinder Matches",
+    rizzScore: "97% Match",
+    badgeTone: "bg-violet-50 text-violet-700 border-violet-200/60",
     line: "Are you always this charming, or did you practice on someone else before matching with me?",
-    usageCount: "Used 3.9k times today",
+    usageCount: "3.9k sent today",
     vibe: "Witty",
   },
 ];
@@ -91,7 +96,12 @@ const VIBE_CATEGORIES = [
   { name: "First Text", icon: "waving_hand" },
 ];
 
-const MOODS = ["Flirty", "Witty", "Sweet", "Bold"];
+const MOODS = [
+  { id: "Flirty", label: "Flirty", emoji: "🔥" },
+  { id: "Witty", label: "Witty", emoji: "💡" },
+  { id: "Sweet", label: "Sweet", emoji: "💖" },
+  { id: "Bold", label: "Bold", emoji: "⚡" },
+];
 
 export default function HomePage() {
   const [selectedMood, setSelectedMood] = useState<string>("Flirty");
@@ -100,6 +110,7 @@ export default function HomePage() {
   const [generatedLine, setGeneratedLine] = useState<string | null>(null);
   const [hasGenerated, setHasGenerated] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [useSampleChat, setUseSampleChat] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [favorites, setFavorites] = useState<Record<string, boolean>>({
     "ai-output": false,
@@ -118,7 +129,7 @@ export default function HomePage() {
   const handleCopy = (text: string, id: string) => {
     navigator.clipboard.writeText(text);
     setCopiedId(id);
-    showToast("Copied to clipboard!");
+    showToast("Copied to clipboard! 📋");
     setTimeout(() => {
       setCopiedId(null);
     }, 1800);
@@ -127,7 +138,7 @@ export default function HomePage() {
   const toggleFavorite = (id: string) => {
     setFavorites((prev) => {
       const next = !prev[id];
-      showToast(next ? "Added to Saved Lines ❤️" : "Removed from Saved");
+      showToast(next ? "Saved to Favorites ❤️" : "Removed from Saved");
       return { ...prev, [id]: next };
     });
   };
@@ -137,7 +148,8 @@ export default function HomePage() {
     if (file) {
       const url = URL.createObjectURL(file);
       setUploadedImage(url);
-      showToast("Screenshot uploaded!");
+      setUseSampleChat(false);
+      showToast("Chat screenshot uploaded!");
     }
   };
 
@@ -154,7 +166,7 @@ export default function HomePage() {
         const outputCard = document.getElementById("ai-output-card");
         outputCard?.scrollIntoView({ behavior: "smooth", block: "nearest" });
       }, 100);
-    }, 650);
+    }, 600);
   };
 
   const filteredCards = INITIAL_TRENDING_LINES.filter((card) => {
@@ -163,41 +175,45 @@ export default function HomePage() {
   });
 
   return (
-    <div className="min-h-screen bg-surface flex flex-col items-center justify-start antialiased text-on-surface">
+    <div className="min-h-screen bg-[#fafbfc] flex flex-col items-center justify-start antialiased text-on-surface">
       {/* Toast Notification */}
       {toastMessage && (
-        <div className="fixed top-20 z-[60] px-4 py-2 bg-on-surface text-surface rounded-full text-label-sm font-medium shadow-lg animate-bounce flex items-center gap-1.5">
-          <span className="material-symbols-outlined text-[16px] text-secondary-container">
+        <div className="fixed top-20 z-[60] px-4 py-2.5 bg-zinc-900/90 text-white backdrop-blur-md rounded-full text-label-sm font-medium shadow-xl animate-fade-in-up flex items-center gap-2 border border-white/10">
+          <span className="material-symbols-outlined text-[16px] text-primary-fixed">
             check_circle
           </span>
           <span>{toastMessage}</span>
         </div>
       )}
 
-      {/* Main Container */}
-      <div className="w-full max-w-md min-h-screen flex flex-col bg-surface relative shadow-2xl md:border-x md:border-outline-variant/30">
+      {/* Mobile Shell */}
+      <div className="w-full max-w-md min-h-screen flex flex-col bg-surface relative shadow-xl shadow-black/5 md:border-x md:border-black/[0.05]">
         <AppHeader title="Home" />
 
         {/* Scrollable Main Area */}
-        <main className="flex flex-col relative w-full px-4 pt-20 pb-28 bg-surface flex-1">
-          <div className="flex flex-col w-full gap-6">
-            {/* Hero Banner / Chat Screenshot Upload Card */}
-            <div className="relative w-full rounded-2xl bg-surface-container-lowest border border-outline-variant/30 p-5 flex flex-col justify-between overflow-hidden shadow-sm">
-              <div className="flex items-center gap-2 mb-2">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary-fixed text-on-primary-fixed text-label-sm font-semibold">
-                  <span className="material-symbols-outlined text-[15px]">auto_awesome</span>
-                  SweetTalk AI
+        <main className="flex flex-col relative w-full px-4 pt-20 pb-32 bg-surface flex-1">
+          <div className="flex flex-col w-full gap-5">
+            {/* Hero AI Generator Card */}
+            <div className="relative w-full rounded-3xl bg-white border border-black/[0.06] p-5 flex flex-col justify-between overflow-hidden shadow-soft">
+              {/* Header Badge */}
+              <div className="flex items-center justify-between mb-3">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold">
+                  <span className="material-symbols-outlined text-[14px]">auto_awesome</span>
+                  AI Conversation Wingman
+                </span>
+                <span className="text-[11px] font-medium text-on-surface-variant/70">
+                  Powered by SweetTalk
                 </span>
               </div>
 
-              <h1 className="font-headline-lg text-on-surface mb-2 leading-tight">
-                Never Get Left on Read! Upload Chat &amp; Generate
+              <h1 className="font-headline-lg text-on-surface mb-1.5 tracking-tight">
+                Never Get Left on Read!
               </h1>
-              <p className="font-body-md text-on-surface-variant mb-4">
-                Upload a screenshot of your chat to instantly generate irresistible AI replies.
+              <p className="font-body-md text-on-surface-variant/80 mb-4 text-xs sm:text-sm leading-relaxed">
+                Upload your chat screenshot to instantly generate witty, flirty, and high-converting replies.
               </p>
 
-              {/* Upload Dropzone */}
+              {/* Chat Upload or Sample Mockup */}
               <input
                 type="file"
                 ref={fileInputRef}
@@ -207,47 +223,75 @@ export default function HomePage() {
               />
 
               {uploadedImage ? (
-                <div className="relative rounded-xl overflow-hidden border border-outline-variant/40 bg-surface-container-low mb-4 group">
+                <div className="relative rounded-2xl overflow-hidden border border-black/[0.08] bg-zinc-50 mb-4 group shadow-xs">
                   <Image
                     src={uploadedImage}
                     alt="Uploaded chat preview"
                     width={400}
                     height={200}
-                    className="w-full max-h-48 object-cover"
+                    className="w-full max-h-44 object-cover"
                   />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2.5">
                     <button
                       type="button"
                       onClick={() => fileInputRef.current?.click()}
-                      className="px-3 py-1.5 rounded-full bg-surface text-on-surface text-label-sm font-medium flex items-center gap-1"
+                      className="px-3.5 py-1.5 rounded-full bg-white text-zinc-900 text-xs font-semibold flex items-center gap-1 shadow-md hover:bg-zinc-100"
                     >
-                      <span className="material-symbols-outlined text-[16px]">change_circle</span>
+                      <span className="material-symbols-outlined text-[15px]">change_circle</span>
                       Change
                     </button>
                     <button
                       type="button"
                       onClick={() => setUploadedImage(null)}
-                      className="px-3 py-1.5 rounded-full bg-error text-on-error text-label-sm font-medium flex items-center gap-1"
+                      className="px-3.5 py-1.5 rounded-full bg-red-600 text-white text-xs font-semibold flex items-center gap-1 shadow-md hover:bg-red-700"
                     >
-                      <span className="material-symbols-outlined text-[16px]">delete</span>
+                      <span className="material-symbols-outlined text-[15px]">delete</span>
                       Remove
                     </button>
                   </div>
-                  <div className="p-2.5 bg-surface-container-low text-label-sm text-on-surface flex items-center justify-between">
-                    <span className="flex items-center gap-1 text-primary font-medium">
+                  <div className="p-2.5 bg-white text-xs text-on-surface flex items-center justify-between border-t border-black/[0.04]">
+                    <span className="flex items-center gap-1.5 text-primary font-semibold">
                       <span className="material-symbols-outlined text-[16px]">check_circle</span>
-                      Screenshot ready for AI
+                      Screenshot ready to generate
                     </span>
                     <button
                       type="button"
                       onClick={() => setUploadedImage(null)}
-                      className="text-outline hover:text-error text-[12px]"
+                      className="text-outline hover:text-red-600"
                     >
                       Clear
                     </button>
                   </div>
                 </div>
+              ) : useSampleChat ? (
+                /* Sample Chat Bubble Preview */
+                <div className="rounded-2xl border border-black/[0.06] bg-gradient-to-b from-zinc-50 to-white p-3.5 mb-4 shadow-2xs">
+                  <div className="flex items-center justify-between pb-2 mb-2 border-b border-black/[0.04]">
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-zinc-200 flex items-center justify-center text-[10px] font-bold text-zinc-700">
+                        JS
+                      </div>
+                      <span className="text-xs font-semibold text-zinc-800">Jessica</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setUseSampleChat(false)}
+                      className="text-[11px] text-primary hover:underline font-medium"
+                    >
+                      Switch to Upload
+                    </button>
+                  </div>
+                  <div className="flex flex-col gap-2 py-1">
+                    <div className="self-start max-w-[85%] bg-zinc-200/80 text-zinc-900 rounded-2xl rounded-tl-sm px-3.5 py-2 text-xs leading-relaxed">
+                      So what are we doing this Friday? You promised to plan something fun 😏
+                    </div>
+                    <div className="self-end max-w-[85%] bg-primary text-white rounded-2xl rounded-tr-sm px-3.5 py-2 text-xs leading-relaxed opacity-60">
+                      Tap generate below for best replies...
+                    </div>
+                  </div>
+                </div>
               ) : (
+                /* Upload Dropzone Container */
                 <div
                   onClick={() => fileInputRef.current?.click()}
                   onDragOver={(e) => e.preventDefault()}
@@ -259,37 +303,59 @@ export default function HomePage() {
                       showToast("Screenshot uploaded!");
                     }
                   }}
-                  className="border-2 border-dashed border-outline-variant/40 rounded-xl p-6 flex flex-col items-center justify-center gap-3 bg-surface-container-low mb-4 cursor-pointer hover:bg-surface-container transition-colors"
+                  className="group border border-dashed border-primary/30 rounded-2xl p-4 sm:p-5 flex flex-col items-center justify-center gap-2.5 bg-primary/[0.02] hover:bg-primary/[0.05] hover:border-primary/60 transition-all cursor-pointer mb-4"
                 >
-                  <div className="w-12 h-12 rounded-full bg-surface-container flex items-center justify-center text-primary shadow-xs">
-                    <span className="material-symbols-outlined text-[24px]">cloud_upload</span>
+                  <div className="w-11 h-11 rounded-2xl bg-white border border-black/[0.06] flex items-center justify-center text-primary shadow-xs group-hover:scale-105 transition-transform">
+                    <span className="material-symbols-outlined text-[22px]">add_photo_alternate</span>
                   </div>
                   <div className="text-center">
-                    <p className="font-label-lg text-on-surface">Tap to upload chat screenshot</p>
-                    <p className="text-label-sm text-outline">or drag and drop images here</p>
+                    <p className="text-xs sm:text-sm font-semibold text-on-surface">
+                      Drop chat screenshot or tap to upload
+                    </p>
+                    <p className="text-[11px] text-on-surface-variant/70 mt-0.5">
+                      Works with Tinder, Bumble, Hinge &amp; Instagram
+                    </p>
                   </div>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setUseSampleChat(true);
+                      showToast("Loaded sample conversation!");
+                    }}
+                    className="mt-1 text-[11px] text-primary font-semibold hover:underline bg-primary/10 px-3 py-1 rounded-full active:scale-95 transition-transform"
+                  >
+                    ✨ Or try with sample chat
+                  </button>
                 </div>
               )}
 
-              {/* Select AI Mood */}
-              <div className="mb-4 flex flex-col gap-1.5">
-                <label className="text-label-sm text-on-surface-variant font-medium">
-                  Select AI Mood
-                </label>
+              {/* Select AI Mood Chips */}
+              <div className="mb-4 flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-semibold text-on-surface-variant">
+                    Select Tone
+                  </label>
+                  <span className="text-[11px] text-outline">
+                    Current: <strong className="text-primary">{selectedMood}</strong>
+                  </span>
+                </div>
                 <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
                   {MOODS.map((mood) => {
-                    const isSelected = selectedMood === mood;
+                    const isSelected = selectedMood === mood.id;
                     return (
                       <button
-                        key={mood}
+                        key={mood.id}
                         type="button"
-                        onClick={() => setSelectedMood(mood)}
-                        className={`px-3.5 py-1.5 rounded-full text-label-sm font-medium flex items-center gap-1 transition-all duration-200 cursor-pointer active:scale-90 ${isSelected
-                            ? "bg-primary text-on-primary font-bold shadow-xs scale-105"
-                            : "bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest"
-                          }`}
+                        onClick={() => setSelectedMood(mood.id)}
+                        className={`px-3.5 py-1.5 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 cursor-pointer active:scale-90 select-none ${
+                          isSelected
+                            ? "bg-primary text-white shadow-md shadow-primary/25 scale-105"
+                            : "bg-surface-container-high/60 text-on-surface-variant hover:bg-surface-container-highest"
+                        }`}
                       >
-                        {mood}
+                        <span>{mood.emoji}</span>
+                        <span>{mood.label}</span>
                       </button>
                     );
                   })}
@@ -301,36 +367,37 @@ export default function HomePage() {
                 type="button"
                 onClick={handleGenerate}
                 disabled={isGenerating}
-                className="w-full bg-primary hover:bg-surface-tint text-on-primary rounded-full py-3.5 font-label-lg flex items-center justify-center gap-1.5 transition-all shadow-sm active:scale-95 cursor-pointer disabled:opacity-75"
+                className="w-full bg-gradient-to-r from-primary to-primary-container hover:opacity-95 text-white rounded-full py-3.5 font-label-lg flex items-center justify-center gap-2 transition-all duration-200 shadow-md shadow-primary/25 active:scale-95 cursor-pointer disabled:opacity-75 relative overflow-hidden"
               >
                 {isGenerating ? (
                   <>
                     <span className="material-symbols-outlined animate-spin text-[18px]">
                       progress_activity
                     </span>
-                    <span>Thinking...</span>
+                    <span className="font-semibold">Brewing Charm...</span>
                   </>
                 ) : (
                   <>
-                    <span>Generate AI Reply</span>
+                    <span className="font-semibold tracking-wide">Generate AI Reply</span>
                     <span className="material-symbols-outlined text-[18px]">bolt</span>
                   </>
                 )}
               </button>
             </div>
 
-            {/* Category Pills (Vibe Check) */}
-            <div className="flex flex-col gap-2">
+            {/* Vibe Check Horizontal Tabs */}
+            <div className="flex flex-col gap-2.5">
               <div className="flex justify-between items-center px-1">
                 <h2 className="font-headline-md text-on-surface">Vibe Check</h2>
                 <Link
                   href="/categories"
-                  className="text-label-sm text-primary cursor-pointer hover:underline"
+                  className="text-xs font-semibold text-primary hover:underline cursor-pointer"
                 >
-                  View all
+                  Explore All →
                 </Link>
               </div>
-              <div className="flex gap-2 overflow-x-auto pb-2 pt-1 no-scrollbar">
+
+              <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
                 {VIBE_CATEGORIES.map((cat) => {
                   const isActive = selectedVibe === cat.name;
                   return (
@@ -338,13 +405,14 @@ export default function HomePage() {
                       key={cat.name}
                       type="button"
                       onClick={() => setSelectedVibe(cat.name)}
-                      className={`px-4 py-2 rounded-full text-label-lg flex items-center gap-1.5 whitespace-nowrap transition-all duration-200 active:scale-90 cursor-pointer ${isActive
-                          ? "bg-primary-container text-on-primary-container font-semibold shadow-xs scale-105"
-                          : "bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest"
-                        }`}
+                      className={`px-3.5 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 whitespace-nowrap transition-all duration-200 active:scale-90 cursor-pointer ${
+                        isActive
+                          ? "bg-primary-container text-white shadow-xs scale-105"
+                          : "bg-white border border-black/[0.06] text-on-surface-variant hover:border-black/[0.15]"
+                      }`}
                     >
                       <span
-                        className="material-symbols-outlined text-[16px]"
+                        className="material-symbols-outlined text-[15px]"
                         style={{ fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0" }}
                       >
                         {cat.icon}
@@ -360,72 +428,98 @@ export default function HomePage() {
             {hasGenerated && (
               <div
                 id="ai-output-card"
-                className="rounded-2xl bg-surface-container-lowest border-2 border-primary/40 p-5 flex flex-col gap-3 shadow-md ring-4 ring-primary/10 transition-all duration-300 ease-out animate-fade-in-up"
+                className="rounded-3xl bg-white border border-primary/30 p-5 flex flex-col gap-3 shadow-soft ring-4 ring-primary/5 transition-all duration-300 ease-out animate-fade-in-up"
               >
                 <div className="flex justify-between items-center">
-                  <span className="text-label-sm text-on-surface font-bold flex items-center gap-1.5">
-                    <span className="material-symbols-outlined text-[18px] text-primary animate-spin" style={{ animationDuration: '3s' }}>
+                  <span className="text-xs font-bold text-on-surface flex items-center gap-1.5">
+                    <span
+                      className="material-symbols-outlined text-[18px] text-primary animate-spin"
+                      style={{ animationDuration: "4s" }}
+                    >
                       auto_awesome
-                    </span>{" "}
-                    Fresh AI Creation ({selectedMood})
+                    </span>
+                    Fresh AI Creation • {selectedMood}
                   </span>
-                  <span className="px-2.5 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed text-label-sm border border-outline-variant/20 font-bold shadow-2xs">
+                  <span className="px-2.5 py-0.5 rounded-full bg-primary/10 text-primary text-[11px] font-bold border border-primary/20">
                     99% Rizz
                   </span>
                 </div>
-                <p className="font-body-lg text-on-surface bg-surface-container-low p-4 rounded-xl border border-outline-variant/20 leading-relaxed text-[15px]">
+
+                <p className="font-body-lg text-on-surface bg-zinc-50 p-4 rounded-2xl border border-black/[0.04] leading-relaxed text-sm sm:text-[15px]">
                   {generatedLine ||
                     `"Are you Wi-Fi? Because I'm feeling a serious connection, and honestly I don't even need a password to love it."`}
                 </p>
-                <div className="flex justify-end gap-2">
+
+                <div className="flex items-center justify-between pt-1">
                   <button
                     type="button"
-                    onClick={() =>
-                      handleCopy(
-                        generatedLine ||
-                        `"Are you Wi-Fi? Because I'm feeling a serious connection, and honestly I don't even need a password to love it."`,
-                        "ai-output"
-                      )
-                    }
-                    className={`shrink-0 whitespace-nowrap px-4 py-2 rounded-full border border-outline-variant/30 text-label-sm flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-xs cursor-pointer ${copiedId === "ai-output"
-                        ? "bg-secondary text-on-secondary"
-                        : "bg-surface-container-low text-on-surface hover:bg-surface-container"
-                      }`}
+                    onClick={handleGenerate}
+                    className="text-xs text-primary font-semibold flex items-center gap-1 hover:underline cursor-pointer"
                   >
-                    <span className={`material-symbols-outlined text-[15px] ${copiedId === "ai-output" ? "scale-110" : ""}`}>
-                      {copiedId === "ai-output" ? "check" : "content_copy"}
-                    </span>
-                    <span className="font-medium">{copiedId === "ai-output" ? "Copied!" : "Copy"}</span>
+                    <span className="material-symbols-outlined text-[14px]">refresh</span>
+                    <span>New Variation</span>
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => toggleFavorite("ai-output")}
-                    className={`shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-label-sm flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-xs cursor-pointer ${favorites["ai-output"]
-                        ? "bg-primary text-on-primary"
-                        : "bg-surface-container-low border border-outline-variant/30 text-on-surface hover:bg-surface-container"
+
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleCopy(
+                          generatedLine ||
+                            `"Are you Wi-Fi? Because I'm feeling a serious connection, and honestly I don't even need a password to love it."`,
+                          "ai-output"
+                        )
+                      }
+                      className={`shrink-0 whitespace-nowrap px-4 py-2 rounded-full border text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-xs cursor-pointer ${
+                        copiedId === "ai-output"
+                          ? "bg-zinc-900 text-white border-transparent"
+                          : "bg-white border-black/[0.08] text-on-surface hover:bg-zinc-50"
                       }`}
-                  >
-                    <span
-                      className={`material-symbols-outlined text-[15px] ${favorites["ai-output"] ? "animate-heart-pop" : ""}`}
-                      style={{
-                        fontVariationSettings: favorites["ai-output"]
-                          ? "'FILL' 1"
-                          : "'FILL' 0",
-                      }}
                     >
-                      favorite
-                    </span>
-                    <span className="font-medium">{favorites["ai-output"] ? "Saved" : "Save"}</span>
-                  </button>
+                      <span className="material-symbols-outlined text-[15px]">
+                        {copiedId === "ai-output" ? "check" : "content_copy"}
+                      </span>
+                      <span>{copiedId === "ai-output" ? "Copied!" : "Copy"}</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => toggleFavorite("ai-output")}
+                      className={`shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-xs cursor-pointer ${
+                        favorites["ai-output"]
+                          ? "bg-primary text-white"
+                          : "bg-white border border-black/[0.08] text-on-surface hover:bg-zinc-50"
+                      }`}
+                    >
+                      <span
+                        className={`material-symbols-outlined text-[15px] ${
+                          favorites["ai-output"] ? "animate-heart-pop text-rose-300" : ""
+                        }`}
+                        style={{
+                          fontVariationSettings: favorites["ai-output"]
+                            ? "'FILL' 1"
+                            : "'FILL' 0",
+                        }}
+                      >
+                        favorite
+                      </span>
+                      <span>{favorites["ai-output"] ? "Saved" : "Save"}</span>
+                    </button>
+                  </div>
                 </div>
               </div>
             )}
 
-            {/* Recommended Pickup Lines & AI Cards */}
+            {/* Trending Rizz Lines */}
             <div className="flex flex-col gap-3">
               <div className="flex justify-between items-center px-1">
-                <h2 className="font-headline-md text-on-surface">Trending Rizz Lines</h2>
-                <span className="text-label-sm text-outline">Updated hourly</span>
+                <div>
+                  <h2 className="font-headline-md text-on-surface">Trending Lines</h2>
+                  <p className="text-[11px] text-outline mt-0.5">Voted top charm this week</p>
+                </div>
+                <span className="text-[11px] font-medium text-outline bg-black/[0.03] px-2.5 py-1 rounded-full">
+                  Updated hourly
+                </span>
               </div>
 
               {filteredCards.map((card) => {
@@ -435,41 +529,52 @@ export default function HomePage() {
                 return (
                   <div
                     key={card.id}
-                    className="rounded-2xl bg-surface-container-lowest border border-outline-variant/30 p-4 sm:p-5 flex flex-col gap-3 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 ease-out"
+                    className="rounded-3xl bg-white border border-black/[0.06] p-4 sm:p-5 flex flex-col gap-3 shadow-2xs hover:shadow-soft hover:-translate-y-0.5 transition-all duration-300 ease-out"
                   >
                     <div className="flex justify-between items-start gap-2">
                       <div className="flex items-center gap-2.5 min-w-0">
-                        <div className="w-9 h-9 rounded-full bg-surface-container flex items-center justify-center text-on-surface font-bold text-base border border-outline-variant/20 shadow-2xs shrink-0 group-hover:scale-105 transition-transform">
+                        <div className="w-10 h-10 rounded-2xl bg-zinc-100/80 flex items-center justify-center text-lg shadow-2xs shrink-0 border border-black/[0.04]">
                           {card.emoji}
                         </div>
                         <div className="min-w-0">
-                          <h3 className="font-label-lg text-on-surface font-semibold leading-snug">
+                          <h3 className="text-sm font-semibold text-on-surface leading-snug">
                             {card.title}
                           </h3>
-                          <span className="text-label-sm text-outline text-xs block leading-tight">{card.subtitle}</span>
+                          <span className="text-xs text-on-surface-variant/70 block leading-tight truncate">
+                            {card.subtitle}
+                          </span>
                         </div>
                       </div>
-                      <span className="shrink-0 whitespace-nowrap px-2.5 py-1 rounded-full bg-surface-container text-on-surface text-label-sm font-bold border border-outline-variant/20 shadow-2xs">
+                      <span
+                        className={`shrink-0 whitespace-nowrap px-2.5 py-1 rounded-full text-xs font-bold border shadow-2xs ${card.badgeTone}`}
+                      >
                         {card.rizzScore}
                       </span>
                     </div>
 
-                    <p className="font-body-lg text-on-surface bg-surface-container-low p-3.5 rounded-xl border border-outline-variant/20 leading-relaxed text-sm sm:text-base">
+                    <p className="font-body-lg text-on-surface bg-zinc-50/80 p-3.5 rounded-2xl border border-black/[0.03] leading-relaxed text-xs sm:text-sm">
                       {card.line}
                     </p>
 
-                    <div className="flex justify-between items-center pt-1 gap-2">
-                      <span className="text-xs sm:text-label-sm text-outline whitespace-nowrap shrink-0">{card.usageCount}</span>
+                    <div className="flex justify-between items-center pt-1 gap-2 border-t border-black/[0.04]">
+                      <span className="text-[11px] text-outline font-medium whitespace-nowrap shrink-0">
+                        {card.usageCount}
+                      </span>
                       <div className="flex items-center gap-2 shrink-0">
                         <button
                           type="button"
                           onClick={() => toggleFavorite(card.id)}
-                          className={`w-9 h-9 rounded-full bg-surface-container-low border border-outline-variant/30 flex items-center justify-center transition-all duration-200 active:scale-80 cursor-pointer shrink-0 ${isFav ? "text-primary border-primary/30" : "text-on-surface-variant hover:text-primary"
-                            }`}
+                          className={`w-9 h-9 rounded-full border flex items-center justify-center transition-all duration-200 active:scale-80 cursor-pointer shrink-0 ${
+                            isFav
+                              ? "bg-rose-50 border-rose-200 text-rose-600"
+                              : "bg-white border-black/[0.08] text-on-surface-variant hover:text-rose-500"
+                          }`}
                           title="Save to favorites"
                         >
                           <span
-                            className={`material-symbols-outlined text-[18px] transition-transform ${isFav ? "animate-heart-pop" : ""}`}
+                            className={`material-symbols-outlined text-[18px] transition-transform ${
+                              isFav ? "animate-heart-pop" : ""
+                            }`}
                             style={{
                               fontVariationSettings: isFav ? "'FILL' 1" : "'FILL' 0",
                             }}
@@ -480,15 +585,18 @@ export default function HomePage() {
                         <button
                           type="button"
                           onClick={() => handleCopy(card.line, card.id)}
-                          className={`shrink-0 whitespace-nowrap px-3.5 sm:px-4 py-2 rounded-full text-label-sm flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-sm cursor-pointer ${isCopied
-                              ? "bg-secondary text-on-secondary"
-                              : "bg-primary text-on-primary hover:bg-surface-tint"
-                            }`}
+                          className={`shrink-0 whitespace-nowrap px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-1.5 transition-all duration-200 active:scale-95 shadow-xs cursor-pointer ${
+                            isCopied
+                              ? "bg-zinc-900 text-white"
+                              : "bg-primary text-white hover:opacity-90"
+                          }`}
                         >
-                          <span className={`material-symbols-outlined text-[16px] shrink-0 ${isCopied ? "scale-110" : ""}`}>
+                          <span className="material-symbols-outlined text-[15px] shrink-0">
                             {isCopied ? "check" : "content_copy"}
                           </span>
-                          <span className="whitespace-nowrap font-medium">{isCopied ? "Copied!" : "Copy Line"}</span>
+                          <span className="whitespace-nowrap">
+                            {isCopied ? "Copied!" : "Copy Line"}
+                          </span>
                         </button>
                       </div>
                     </div>

@@ -37,7 +37,7 @@ const PLANS: Plan[] = [
     features: [
       "Everything in Monthly",
       "Priority AI generation speed",
-      "Custom mood creator & 5 daily icebreakers",
+      "Custom mood creator & daily icebreakers",
       "Unlimited saved folders",
     ],
   },
@@ -107,10 +107,10 @@ export default function PricingPage() {
   const selectedPlanData = PLANS.find((p) => p.id === currentPlan) || PLANS[1];
 
   return (
-    <div className="min-h-screen bg-surface flex flex-col items-center justify-start antialiased text-on-surface">
+    <div className="min-h-screen bg-[#fafbfc] flex flex-col items-center justify-start antialiased text-on-surface">
       {toastMessage && (
-        <div className="fixed top-20 z-[60] px-4 py-2 bg-on-surface text-surface rounded-full text-label-sm font-medium shadow-lg animate-bounce flex items-center gap-1.5">
-          <span className="material-symbols-outlined text-[16px] text-secondary-container">
+        <div className="fixed top-20 z-[60] px-4 py-2.5 bg-zinc-900/90 text-white backdrop-blur-md rounded-full text-label-sm font-medium shadow-xl animate-fade-in-up flex items-center gap-2 border border-white/10">
+          <span className="material-symbols-outlined text-[16px] text-primary-fixed">
             check_circle
           </span>
           <span>{toastMessage}</span>
@@ -120,31 +120,33 @@ export default function PricingPage() {
       {/* Checkout Modal */}
       {showCheckoutModal && (
         <div className="fixed inset-0 z-[70] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="w-full max-w-sm bg-surface-container-lowest rounded-3xl p-6 shadow-2xl flex flex-col gap-4 animate-in zoom-in-95">
-            <div className="flex items-center justify-between pb-3 border-b border-outline-variant/20">
+          <div className="w-full max-w-sm bg-white rounded-3xl p-6 shadow-2xl flex flex-col gap-4 animate-scale-in border border-black/[0.08]">
+            <div className="flex items-center justify-between pb-3 border-b border-black/[0.06]">
               <div className="flex items-center gap-2">
-                <span className="material-symbols-outlined text-primary text-[24px]">
+                <span className="material-symbols-outlined text-primary text-[22px]">
                   workspace_premium
                 </span>
-                <h3 className="font-headline-md text-on-surface">Confirm VIP Order</h3>
+                <h3 className="font-headline-md text-on-surface text-base font-bold">
+                  Confirm VIP Order
+                </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setShowCheckoutModal(false)}
-                className="text-outline hover:text-on-surface"
+                className="w-7 h-7 rounded-full bg-zinc-100 flex items-center justify-center text-outline hover:text-on-surface"
               >
-                <span className="material-symbols-outlined text-[20px]">close</span>
+                <span className="material-symbols-outlined text-[16px]">close</span>
               </button>
             </div>
 
-            <div className="bg-surface-container-low p-4 rounded-2xl flex flex-col gap-2">
+            <div className="bg-zinc-50 p-4 rounded-2xl flex flex-col gap-2 border border-black/[0.04]">
               <div className="flex justify-between items-center">
-                <span className="font-headline-md text-on-surface">{selectedPlanData.name}</span>
-                <span className="font-headline-lg text-primary">{selectedPlanData.price}</span>
+                <span className="font-bold text-sm text-on-surface">{selectedPlanData.name}</span>
+                <span className="font-bold text-lg text-primary">{selectedPlanData.price}</span>
               </div>
-              <span className="text-label-sm text-outline">{selectedPlanData.period}</span>
-              <p className="text-xs text-on-surface-variant pt-2 border-t border-outline-variant/20">
-                Includes priority AI generation, 4 core mood modes, and unlimited icebreakers.
+              <span className="text-[11px] text-outline">{selectedPlanData.period}</span>
+              <p className="text-[11px] text-on-surface-variant/70 pt-2 border-t border-black/[0.04]">
+                Includes unlimited AI replies, custom screenshot analysis, and priority queue.
               </p>
             </div>
 
@@ -152,18 +154,18 @@ export default function PricingPage() {
               type="button"
               onClick={confirmCheckout}
               disabled={isProcessing}
-              className="w-full py-3.5 bg-primary hover:bg-surface-tint text-on-primary font-bold rounded-full shadow-lg transition-all flex items-center justify-center gap-2 text-label-lg active:scale-95 cursor-pointer disabled:opacity-75"
+              className="w-full py-3.5 bg-gradient-to-r from-primary to-primary-container text-white font-bold rounded-full shadow-md shadow-primary/25 transition-all flex items-center justify-center gap-2 text-xs cursor-pointer active:scale-95 disabled:opacity-75"
             >
               {isProcessing ? (
                 <>
-                  <span className="material-symbols-outlined animate-spin text-[18px]">
+                  <span className="material-symbols-outlined animate-spin text-[16px]">
                     progress_activity
                   </span>
                   <span>Activating VIP...</span>
                 </>
               ) : (
                 <>
-                  <span className="material-symbols-outlined text-[18px]">lock</span>
+                  <span className="material-symbols-outlined text-[16px]">lock</span>
                   <span>Confirm &amp; Pay {selectedPlanData.price}</span>
                 </>
               )}
@@ -172,27 +174,32 @@ export default function PricingPage() {
         </div>
       )}
 
-      <div className="w-full max-w-md min-h-screen flex flex-col bg-surface relative shadow-2xl md:border-x md:border-outline-variant/30">
-        <AppHeader title="Pricing" />
+      <div className="w-full max-w-md min-h-screen flex flex-col bg-surface relative shadow-xl shadow-black/5 md:border-x md:border-black/[0.05]">
+        <AppHeader title="VIP Pricing" />
 
-        <main className="flex flex-col relative w-full px-4 pt-20 pb-28 bg-surface flex-1">
-          <div className="flex flex-col w-full pb-8">
+        <main className="flex flex-col relative w-full px-4 pt-20 pb-32 bg-surface flex-1">
+          <div className="flex flex-col w-full pb-6">
             {/* Header Title Section */}
-            <div className="flex flex-col mb-6 mt-2">
-              <h1 className="font-headline-lg text-on-surface">Upgrade to Rizz VIP</h1>
-              <p className="font-body-md text-on-surface-variant mt-1 leading-relaxed">
-                Unlock unlimited AI chat replies, advanced tone controls, and exclusive pickup lines.
+            <div className="flex flex-col mb-5 mt-1 text-center">
+              <span className="text-[11px] font-bold tracking-wider text-primary uppercase mb-1">
+                Unlock Full Potential
+              </span>
+              <h1 className="font-headline-lg text-on-surface text-xl sm:text-2xl font-bold tracking-tight">
+                Upgrade to Rizz VIP
+              </h1>
+              <p className="text-xs sm:text-sm text-on-surface-variant/80 mt-1 max-w-xs mx-auto leading-relaxed">
+                Unlimited AI chat replies, advanced tone controls, and exclusive openers.
               </p>
             </div>
 
             {/* Plan Selector Segmented Tabs */}
-            <div className="flex bg-surface-container-high p-1 rounded-full mb-6">
+            <div className="flex bg-zinc-100/90 p-1 rounded-full mb-5 border border-black/[0.04]">
               <button
                 type="button"
                 onClick={() => setCurrentPlan("monthly")}
-                className={`flex-1 py-2.5 rounded-full text-label-lg font-bold transition-all cursor-pointer ${
+                className={`flex-1 py-2 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer active:scale-95 ${
                   currentPlan === "monthly"
-                    ? "bg-surface text-on-surface shadow-sm"
+                    ? "bg-white text-zinc-900 shadow-sm font-bold"
                     : "text-on-surface-variant hover:text-on-surface"
                 }`}
               >
@@ -202,14 +209,14 @@ export default function PricingPage() {
               <button
                 type="button"
                 onClick={() => setCurrentPlan("annual")}
-                className={`flex-1 py-2.5 rounded-full text-label-lg font-bold transition-all cursor-pointer flex items-center justify-center gap-1 ${
+                className={`flex-1 py-2 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer flex items-center justify-center gap-1 active:scale-95 ${
                   currentPlan === "annual"
-                    ? "bg-surface text-on-surface shadow-sm"
+                    ? "bg-white text-zinc-900 shadow-sm font-bold"
                     : "text-on-surface-variant hover:text-on-surface"
                 }`}
               >
                 <span>Annual</span>
-                <span className="text-[10px] bg-primary text-on-primary px-1.5 py-0.5 rounded-full font-semibold">
+                <span className="text-[9.5px] bg-primary text-white px-1.5 py-0.5 rounded-full font-bold">
                   Save 58%
                 </span>
               </button>
@@ -217,9 +224,9 @@ export default function PricingPage() {
               <button
                 type="button"
                 onClick={() => setCurrentPlan("lifetime")}
-                className={`flex-1 py-2.5 rounded-full text-label-lg font-bold transition-all cursor-pointer ${
+                className={`flex-1 py-2 rounded-full text-xs font-semibold transition-all duration-200 cursor-pointer active:scale-95 ${
                   currentPlan === "lifetime"
-                    ? "bg-surface text-on-surface shadow-sm"
+                    ? "bg-white text-zinc-900 shadow-sm font-bold"
                     : "text-on-surface-variant hover:text-on-surface"
                 }`}
               >
@@ -228,102 +235,107 @@ export default function PricingPage() {
             </div>
 
             {/* Plan Cards Stack */}
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3.5">
               {PLANS.map((plan) => {
                 const isSelected = currentPlan === plan.id;
 
                 return (
-                  <div
+                  <button
                     key={plan.id}
+                    type="button"
                     onClick={() => setCurrentPlan(plan.id)}
-                    className={`relative bg-surface-container-lowest p-6 rounded-2xl transition-all duration-300 ease-out cursor-pointer border-2 active:scale-[0.99] ${
+                    className={`w-full text-left relative bg-white p-5 rounded-3xl transition-all duration-300 ease-out cursor-pointer border-2 active:scale-[0.99] select-none touch-manipulation ${
                       isSelected
-                        ? "border-primary shadow-lg scale-[1.01]"
-                        : "border-transparent shadow-sm hover:border-outline-variant/40 hover:-translate-y-0.5 hover:shadow-md"
+                        ? "border-primary shadow-soft scale-[1.01]"
+                        : "border-black/[0.06] shadow-2xs hover:border-black/[0.15] hover:-translate-y-0.5"
                     }`}
                   >
                     {plan.popular && (
-                      <div className="absolute -top-3 right-6 bg-primary text-on-primary text-label-sm px-3 py-1 rounded-full font-bold shadow-sm">
+                      <div className="absolute -top-3 right-5 bg-gradient-to-r from-primary to-indigo-600 text-white text-[10.5px] px-3 py-0.5 rounded-full font-bold shadow-sm pointer-events-none">
                         Most Popular
                       </div>
                     )}
 
-                    <div className="flex justify-between items-start mb-4">
+                    <div className="flex justify-between items-start mb-3 pointer-events-none">
                       <div>
                         <span
-                          className={`text-label-sm uppercase tracking-wider font-bold ${
-                            isSelected ? "text-primary" : "text-on-surface-variant"
+                          className={`text-[10px] uppercase tracking-wider font-bold ${
+                            isSelected ? "text-primary" : "text-outline"
                           }`}
                         >
                           {plan.badge}
                         </span>
-                        <h3 className="font-headline-md text-on-surface mt-0.5">{plan.name}</h3>
+                        <h3 className="text-base font-bold text-on-surface mt-0.5">{plan.name}</h3>
                       </div>
                       <div className="text-right shrink-0">
-                        <span className="font-headline-lg text-on-surface whitespace-nowrap">{plan.price}</span>
-                        <span className="text-label-sm text-on-surface-variant block whitespace-nowrap">
+                        <span className="text-xl font-bold text-on-surface whitespace-nowrap">
+                          {plan.price}
+                        </span>
+                        <span className="text-[11px] text-outline block whitespace-nowrap">
                           {plan.period}
                         </span>
                       </div>
                     </div>
 
-                    <ul className="flex flex-col gap-2.5 text-body-md text-on-surface-variant">
+                    <ul className="flex flex-col gap-2 text-xs text-on-surface-variant pt-2 border-t border-black/[0.04] pointer-events-none">
                       {plan.features.map((feat, idx) => (
                         <li key={idx} className="flex items-center gap-2">
-                          <span className="material-symbols-outlined text-primary text-[18px]">
+                          <span className="material-symbols-outlined text-primary text-[16px]">
                             check_circle
                           </span>
                           <span>{feat}</span>
                         </li>
                       ))}
                     </ul>
-                  </div>
+                  </button>
                 );
               })}
             </div>
 
             {/* Upgrade CTA */}
-            <div className="mt-6">
+            <div className="mt-5">
               <button
                 type="button"
                 onClick={handleUpgrade}
-                className="w-full py-4 bg-primary text-on-primary font-bold rounded-full shadow-lg hover:opacity-95 active:scale-95 transition-all text-center flex items-center justify-center gap-2 text-label-lg cursor-pointer"
+                className="w-full py-3.5 bg-gradient-to-r from-primary to-primary-container text-white font-bold rounded-full shadow-md shadow-primary/25 hover:opacity-95 active:scale-95 transition-all text-center flex items-center justify-center gap-2 text-xs sm:text-sm cursor-pointer"
               >
-                <span className="material-symbols-outlined">workspace_premium</span>
+                <span className="material-symbols-outlined text-[18px]">workspace_premium</span>
                 <span>Upgrade to {selectedPlanData.name}</span>
               </button>
-              <p className="text-center text-label-sm text-on-surface-variant mt-3">
+              <p className="text-center text-[11px] text-outline mt-2.5">
                 Cancel anytime in your app store settings. Secure checkout.
               </p>
             </div>
 
             {/* Frequently Asked Questions */}
-            <div className="mt-10 mb-4">
-              <h3 className="font-headline-md text-on-surface mb-4">Frequently Asked Questions</h3>
-              <div className="flex flex-col gap-3">
+            <div className="mt-8 mb-4">
+              <h3 className="font-headline-md text-on-surface text-sm font-bold mb-3 px-1">
+                Frequently Asked Questions
+              </h3>
+              <div className="flex flex-col gap-2.5">
                 {FAQS.map((faq, index) => {
                   const isOpen = !!openFaqs[index];
                   return (
                     <div
                       key={index}
-                      className="bg-surface-container-lowest p-4 rounded-xl border border-outline-variant/20 transition-colors"
+                      className="bg-white p-4 rounded-2xl border border-black/[0.06] transition-colors shadow-2xs"
                     >
                       <button
                         type="button"
                         onClick={() => toggleFaq(index)}
-                        className="w-full flex justify-between items-center text-left font-bold text-on-surface cursor-pointer gap-2"
+                        className="w-full flex justify-between items-center text-left font-semibold text-xs sm:text-sm text-on-surface cursor-pointer gap-2"
                       >
-                        <span className="text-label-lg">{faq.question}</span>
+                        <span>{faq.question}</span>
                         <span
-                          className={`material-symbols-outlined transition-transform duration-200 text-outline ${
-                            isOpen ? "rotate-180" : ""
+                          className={`material-symbols-outlined transition-transform duration-200 text-outline text-[18px] ${
+                            isOpen ? "rotate-180 text-primary" : ""
                           }`}
                         >
                           expand_more
                         </span>
                       </button>
                       {isOpen && (
-                        <p className="text-body-md text-on-surface-variant mt-2 pt-2 border-t border-outline-variant/15 leading-relaxed text-sm animate-in fade-in">
+                        <p className="text-xs text-on-surface-variant/80 mt-2 pt-2 border-t border-black/[0.04] leading-relaxed animate-in fade-in">
                           {faq.answer}
                         </p>
                       )}
